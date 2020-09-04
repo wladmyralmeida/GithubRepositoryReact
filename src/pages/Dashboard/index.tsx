@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import { FiChevronRight } from "react-icons/fi";
 
 import api from "../../services/api";
@@ -19,8 +19,29 @@ interface Repository {
 
 const Dashboard: React.FC = () => {
     const [newRepo, setNewRepo] = useState("");
-    const [repositories, setRepositories] = useState<Repository[]>([]);
+    const [repositories, setRepositories] = useState<Repository[]>(() => {
+        const storagedRepositories = localStorage.getItem(
+            "@GithubExplorer:repositories"
+        );
+
+        //Para evitar chamar 2x;
+        //"Desconverter" para voltar ao formato original, após consultado no local storage;
+        if (storagedRepositories) {
+            return JSON.parse(storagedRepositories);
+        } else {
+            return [];
+        }
+    });
     const [inputError, setInputError] = useState("");
+
+    //Sempre que tiver uma modificação nos repositories, salvar no local storage;
+    //Converter uma variável para um formato de JSON;
+    useEffect(() => {
+        localStorage.setItem(
+            "@GithubExplorer:repositories",
+            JSON.stringify(repositories)
+        );
+    }, [repositories]);
 
     //1- Adicionar um novo repositório -> newRepo
     //2- Consumir api do github, 3- salvar o novo repositório no estado;
