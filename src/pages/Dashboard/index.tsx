@@ -7,7 +7,6 @@ import api from "../../services/api";
 import logoImg from "../../assets/Logo.svg";
 
 import { Title, Form, Repositories, Error } from "./styles";
-import Repository from "../Repository";
 
 //Não precisa colocar a tipagem de tudo que o repositório vai ter KKK;
 interface Repository {
